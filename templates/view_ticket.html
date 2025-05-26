@@ -1,0 +1,101 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>{{ title }}: {{ ticket.subject }}</h2>
+<hr>
+<div class="row">
+    <div class="col-md-8">
+        <h4>Ticket Details</h4>
+        <p><strong>Status:</strong> <span class="badge bg-primary">{{ ticket.status }}</span></p>
+        <p><strong>Priority:</strong> <span class="badge bg-warning text-dark">{{ ticket.priority }}</span></p>
+        <p><strong>Category:</strong> {{ ticket.category }}</p>
+        <p><strong>Customer:</strong> {{ User.query.get(ticket.customer_id).username if User.query.get(ticket.customer_id) else 'N/A' }}</p>
+        <p><strong>Created:</strong> {{ ticket.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        <p><strong>Last Updated:</strong> {{ ticket.updated_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        {% if current_user.role != 'customer' %}
+             <p><strong>Assigned Agent:</strong> {{ User.query.get(ticket.agent_id).username if ticket.agent_id and User.query.get(ticket.agent_id) else 'Unassigned' }}</p>
+        {% endif %}
+        
+        <hr>
+        <h4>Description:</h4>
+        <div class="card card-body bg-light mb-3">
+            {{ ticket.description | safe }}
+        </div>
+
+        <h4>Conversation History / Notes:</h4>
+        <div id="ticket-messages" style="max-height: 400px; overflow-y: auto; border: 1px solid #eee; padding:10px;">
+            {% if ticket_messages %}
+                {% for message in ticket_messages %}
+                    <div class="mb-2 p-2 rounded {% if message.sender_type == 'agent' %}bg-light-blue{% elif message.sender_type == 'customer' %}bg-light-green{% else %}bg-light{% endif %}">
+                        <strong>{{ User.query.get(message.user_id).username if message.user_id else message.sender_type|capitalize }}:</strong>
+                        <small class="text-muted float-end">{{ message.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+                        <p class="mb-0">{{ message.message_text | safe }}</p>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p>No messages or notes yet.</p>
+            {% endif %}
+        </div>
+        <hr>
+        <h4>Add Note / Reply:</h4>
+        <form method="POST" action="{{ url_for('ticketing.view_ticket', ticket_id=ticket.id) }}">
+            {{ note_form.hidden_tag() }}
+            <div class="mb-3">
+                {{ note_form.note_content.label(class="form-label") }}
+                {{ note_form.note_content(class="form-control", rows="4") }}
+            </div>
+            <button type="submit" name="submit_note" class="btn btn-info">Add Note/Reply</button>
+        </form>
+
+    </div>
+
+    {% if current_user.role in ['admin', 'agent'] %}
+    <div class="col-md-4">
+        <h4>Update Ticket Details</h4>
+        <form method="POST" action="{{ url_for('ticketing.view_ticket', ticket_id=ticket.id) }}">
+            {{ form.hidden_tag() }}
+             <div class="mb-3">
+                {{ form.subject.label(class="form-label") }}
+                {{ form.subject(class="form-control") }}
+            </div>
+            <!-- Description update might be better handled via notes, or allow edit of original only -->
+            <div class="mb-3">
+                {{ form.status.label(class="form-label") }}
+                {{ form.status(class="form-select") }}
+            </div>
+            <div class="mb-3">
+                {{ form.priority.label(class="form-label") }}
+                {{ form.priority(class="form-select") }}
+            </div>
+            <div class="mb-3">
+                {{ form.category.label(class="form-label") }}
+                {{ form.category(class="form-control") }}
+            </div>
+            <div class="mb-3">
+                {{ form.assignee_id.label(class="form-label") }}
+                {{ form.assignee_id(class="form-select") }}
+            </div>
+            <button type="submit" name="submit_ticket_details" class="btn btn-primary">Update Ticket Details</button>
+        </form>
+        <hr>
+        <h4>AI Suggested Solutions (from KB)</h4>
+        {% if ai_suggested_solutions %}
+            <ul class="list-group">
+            {% for sol in ai_suggested_solutions %}
+                <li class="list-group-item">
+                    <strong>{{ sol.title }}</strong>
+                    <p><small>{{ sol.content_snippet }}</small></p>
+                    {# <!-- <a href="{{ url_for('kb.view_item', item_id=sol.id) }}" class="btn btn-sm btn-outline-secondary">View Full</a> --> #}
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>No specific AI suggestions found at the moment.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .bg-light-blue { background-color: #e7f1ff; }
+    .bg-light-green { background-color: #e6ffed; }
+</style>
+{% endblock %}

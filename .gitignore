@@ -1,0 +1,14 @@
+# hackathon/.gitignore
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+# *.sqlite3 
+# *.db
+# instance/app.db # Comment out if committing app.db for Vercel
+# chroma_db_store/ # Comment out if committing chroma_db_store for Vercel
+.env
+# If you have a local .env.vercel for testing Vercel env vars locally:
+.env.vercel

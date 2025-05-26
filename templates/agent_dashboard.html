@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Agent Dashboard for {{ current_user.company.name }}</h1>
+<p>Welcome, {{ username }}!</p>
+<p>Here you can manage your assigned tickets and use the Agent-Assist Chatbot.</p>
+
+<div class="row">
+    <div class="col-md-8">
+        <h4>Your Active Tickets</h4>
+        <a href="{{ url_for('ticketing.list_tickets') }}" class="btn btn-info mb-2">View All My Tickets</a>
+        <!-- List a few active tickets here -->
+    </div>
+    <div class="col-md-4">
+        <h4>Agent-Assist Copilot</h4>
+        <div id="agent-assist-chat-container">
+            <div id="agent-assist-output" style="height: 200px; border: 1px solid #ccc; overflow-y: scroll; padding: 10px; margin-bottom:10px;">
+                Agent Copilot responses will appear here...
+            </div>
+            <textarea id="agent-assist-context" class="form-control mb-2" rows="3" placeholder="Paste current customer conversation snippet..."></textarea>
+            <input type="text" id="agent-assist-query" class="form-control mb-2" placeholder="Your query (e.g., 'summarize this', 'find solutions for X')">
+            <button id="send-agent-assist-query" class="btn btn-primary">Ask Copilot</button>
+        </div>
+    </div>
+</div>
+
+<!-- Placeholder for AI-Powered Agent Performance Monitoring -->
+<div class="mt-4">
+    <h4>Your Performance Insights (Conceptual)</h4>
+    <p><em>This section would display AI-analyzed metrics and feedback.</em></p>
+    <ul>
+        <li>Quality assurance scores on recent interactions.</li>
+        <li>Efficiency metrics (average handling time, FCR).</li>
+        <li>Personalized coaching suggestions.</li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sendAgentAssistBtn = document.getElementById('send-agent-assist-query');
+    if (sendAgentAssistBtn) {
+        sendAgentAssistBtn.addEventListener('click', function() {
+            const context = document.getElementById('agent-assist-context').value;
+            const query = document.getElementById('agent-assist-query').value;
+            const outputDiv = document.getElementById('agent-assist-output');
+
+            outputDiv.innerHTML += `<p><strong>You:</strong> ${query || 'General assistance'}</p>`;
+
+            fetch("{{ url_for('chatbot.agent_assist_endpoint') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': "{{ csrf_token() if csrf_token else '' }}" // If you add CSRF to AJAX
+                },
+                body: JSON.stringify({ conversation_context: context, agent_query: query })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    outputDiv.innerHTML += `<p class="text-danger"><strong>Copilot Error:</strong> ${data.error}</p>`;
+                } else {
+                    outputDiv.innerHTML += `<p><strong>Copilot:</strong> ${data.suggestion}</p>`;
+                    if(data.retrieved_kb_count > 0) {
+                         outputDiv.innerHTML += `<small>(${data.retrieved_kb_count} KB articles referenced)</small>`;
+                    }
+                }
+                outputDiv.scrollTop = outputDiv.scrollHeight; // Scroll to bottom
+            })
+            .catch(error => {
+                console.error('Agent Assist Error:', error);
+                outputDiv.innerHTML += `<p class="text-danger"><strong>System Error:</strong> Could not reach copilot.</p>`;
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

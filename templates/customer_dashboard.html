@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Customer Dashboard for {{ current_user.company.name }}</h1>
+<p>Welcome, {{ username }}!</p>
+<p>How can we help you today?</p>
+
+<div class="row">
+    <div class="col-md-7">
+        <h4>My Recent Tickets</h4>
+        <a href="{{ url_for('ticketing.list_tickets') }}" class="btn btn-secondary mb-2">View All My Tickets</a>
+        <a href="{{ url_for('ticketing.create_ticket') }}" class="btn btn-success mb-2">Create New Ticket</a>
+        <!-- List a few tickets -->
+    </div>
+    <div class="col-md-5">
+        <h4>Chat with our AI Assistant</h4>
+        {% include 'partials/_chat_interface.html' with context %}
+    </div>
+</div>
+
+<!-- Placeholder for AI-Driven CX Optimizations (Proactive Support) -->
+<div class="mt-4">
+    <h4>Proactive Support (Conceptual)</h4>
+    <p><em>This section might display proactive tips or alerts based on your product usage or common issues.</em></p>
+    <ul>
+        <li>"We noticed you recently used [Feature X]. Here's a tip to get more out of it!"</li>
+        <li>"Users of [Product Y] sometimes encounter [Issue Z]. Here's how to prevent it."</li>
+    </ul>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+// For customer chat interface
+document.addEventListener('DOMContentLoaded', function () {
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatOutput = document.getElementById('chat-output');
+    const chatSessionIdInput = document.getElementById('chat-session-id');
+
+    // Generate a simple session ID for the chat
+    if (!chatSessionIdInput.value) {
+        chatSessionIdInput.value = 'session_' + Date.now() + Math.random().toString(36).substring(2, 15);
+    }
+
+    if (chatForm) {
+        chatForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const userMessage = chatInput.value.trim();
+            if (!userMessage) return;
+
+            appendMessage('You', userMessage);
+            chatInput.value = '';
+
+            fetch("{{ url_for('chatbot.customer_chat_endpoint') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': "{{ csrf_token() if csrf_token else '' }}" // Add if you use Flask-WTF CSRF on AJAX
+                },
+                body: JSON.stringify({ message: userMessage, session_id: chatSessionIdInput.value })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    appendMessage('Error', data.error, 'error');
+                } else {
+                    appendMessage('Bot', data.bot_response, 'bot');
+                    if (data.handoff_triggered && data.ticket_id) {
+                        appendMessage('System', `A ticket (ID: ${data.ticket_id}) has been created. An agent will assist you.`, 'system');
+                        // Optionally redirect or update UI to show ticket.
+                    }
+                    // If new session_id comes from server, update it (though here client generates)
+                    // if (data.session_id) chatSessionIdInput.value = data.session_id;
+                }
+            })
+            .catch(error => {
+                console.error('Chat Error:', error);
+                appendMessage('System Error', 'Could not connect to the chat service.', 'error');
+            });
+        });
+    }
+
+    function appendMessage(sender, message, type = '') {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('chat-message');
+        if (type === 'bot') messageDiv.classList.add('bot-message');
+        else if (type === 'error' || type === 'system') messageDiv.classList.add('system-message');
+        
+        messageDiv.innerHTML = `<strong>${sender}:</strong> ${message.replace(/\n/g, "<br>")}`;
+        chatOutput.appendChild(messageDiv);
+        chatOutput.scrollTop = chatOutput.scrollHeight;
+    }
+});
+</script>
+{% endblock %}

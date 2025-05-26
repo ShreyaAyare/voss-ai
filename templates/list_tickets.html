@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>{{ title }}</h2>
+{% if current_user.role == 'customer' %}
+    <a href="{{ url_for('ticketing.create_ticket') }}" class="btn btn-primary mb-3">Create New Ticket</a>
+{% endif %}
+
+{% if tickets %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Subject</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Category</th>
+            <th>Last Updated</th>
+            {% if current_user.role != 'customer' %}
+                <th>Customer</th>
+                <th>Assigned Agent</th>
+            {% endif %}
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ticket in tickets %}
+        <tr>
+            <td>{{ ticket.id }}</td>
+            <td>{{ ticket.subject }}</td>
+            <td><span class="badge bg-info text-dark">{{ ticket.status }}</span></td>
+            <td>
+                {% if ticket.priority == 'High' or ticket.priority == 'Urgent' %}
+                    <span class="badge bg-danger">{{ ticket.priority }}</span>
+                {% elif ticket.priority == 'Medium' %}
+                    <span class="badge bg-warning text-dark">{{ ticket.priority }}</span>
+                {% else %}
+                    <span class="badge bg-secondary">{{ ticket.priority }}</span>
+                {% endif %}
+            </td>
+            <td>{{ ticket.category }}</td>
+            <td>{{ ticket.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            {% if current_user.role != 'customer' %}
+                <td>{{ User.query.get(ticket.customer_id).username if User.query.get(ticket.customer_id) else 'N/A' }}</td>
+                <td>{{ User.query.get(ticket.agent_id).username if ticket.agent_id and User.query.get(ticket.agent_id) else 'Unassigned' }}</td>
+            {% endif %}
+            <td><a href="{{ url_for('ticketing.view_ticket', ticket_id=ticket.id) }}" class="btn btn-sm btn-outline-primary">View</a></td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No tickets found.</p>
+{% endif %}
+{% endblock %}

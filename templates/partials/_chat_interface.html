@@ -1,0 +1,16 @@
+<div id="chat-container" class="card">
+    <div class="card-header">AI Chat Assistant</div>
+    <div id="chat-output" class="card-body" style="height: 300px; overflow-y: scroll; border-bottom: 1px solid #eee;">
+        <!-- Chat messages will appear here -->
+        <p class="text-muted">Ask me anything about our products or services!</p>
+    </div>
+    <div class="card-footer">
+        <form id="chat-form">
+            <input type="hidden" id="chat-session-id" value=""> <!-- session_id managed by JS -->
+            <div class="input-group">
+                <input type="text" id="chat-input" class="form-control" placeholder="Type your message..." autocomplete="off">
+                <button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </form>
+    </div>
+</div>

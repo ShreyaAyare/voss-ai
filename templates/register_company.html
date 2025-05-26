@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <h2>{{ title }} - Register Your Company & Admin Account</h2>
+        <form method="POST" action="">
+            {{ form.hidden_tag() }}
+            <fieldset>
+                <legend>Company Information</legend>
+                <div class="mb-3">
+                    {{ form.company_name.label(class="form-label") }}
+                    {{ form.company_name(class="form-control", placeholder="Your Company LLC") }}
+                    {% if form.company_name.errors %}
+                        {% for error in form.company_name.errors %}
+                            <small class="text-danger">{{ error }}</small><br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <hr>
+            <fieldset>
+                <legend>Administrator Account</legend>
+                <div class="mb-3">
+                    {{ form.username.label(class="form-label") }}
+                    {{ form.username(class="form-control", placeholder="admin_user") }}
+                     {% if form.username.errors %}
+                        {% for error in form.username.errors %}
+                            <small class="text-danger">{{ error }}</small><br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.email.label(class="form-label") }}
+                    {{ form.email(class="form-control", placeholder="admin@company.com") }}
+                     {% if form.email.errors %}
+                        {% for error in form.email.errors %}
+                            <small class="text-danger">{{ error }}</small><br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.password.label(class="form-label") }}
+                    {{ form.password(class="form-control") }}
+                     {% if form.password.errors %}
+                        {% for error in form.password.errors %}
+                            <small class="text-danger">{{ error }}</small><br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <div class="mb-3">
+                    {{ form.confirm_password.label(class="form-label") }}
+                    {{ form.confirm_password(class="form-control") }}
+                     {% if form.confirm_password.errors %}
+                        {% for error in form.confirm_password.errors %}
+                            <small class="text-danger">{{ error }}</small><br>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </fieldset>
+            <div class="mb-3">
+                {{ form.submit(class="btn btn-lg btn-success") }}
+            </div>
+        </form>
+         <p>Already registered? <a href="{{ url_for('auth.login') }}">Login here</a></p>
+    </div>
+</div>
+{% endblock %}

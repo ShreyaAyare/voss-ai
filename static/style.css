@@ -1,0 +1,486 @@
+/* hackathon/static/style.css */
+:root {
+    --primary-color: #0d6efd; /* Bootstrap Blue */
+    --primary-hover-color: #0a58ca;
+    --secondary-color: #6c757d; /* Bootstrap Gray */
+    --success-color: #198754; /* Bootstrap Green */
+    --success-hover-color: #146c43;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+    --info-color: #0dcaf0;
+
+    /* Light Theme Defaults */
+    --bg-color: #f8f9fa;
+    --text-color: #212529;
+    --heading-color: #343a40;
+    --card-bg: #ffffff;
+    --card-border-color: #dee2e6;
+    --navbar-bg: #e9ecef; /* Slightly off-white for light navbar */
+    --navbar-text-color: #343a40;
+    --link-color: var(--primary-color);
+    --link-hover-color: var(--primary-hover-color);
+    --input-bg: #fff;
+    --input-border-color: #ced4da;
+    --input-text-color: #495057;
+    --input-focus-border: var(--primary-color);
+    --input-focus-shadow-rgb: 0, 123, 255;
+    --table-header-bg: #e9ecef;
+    --table-border-color: #dee2e6;
+    --table-row-hover-bg: #f1f3f5;
+    --hr-color: #ced4da;
+
+    --badge-info-bg: #cfe2ff;
+    --badge-info-text: #084298;
+    --badge-warning-bg: #fff3cd;
+    --badge-warning-text: #664d03;
+    --badge-danger-bg: #f8d7da;
+    --badge-danger-text: #842029;
+    --badge-secondary-bg: #e2e3e5;
+    --badge-secondary-text: #41464b;
+
+    --chat-bot-bg: #e1f5fe;
+    --chat-bot-text: #01579b;
+    --chat-user-bg: #c8e6c9;
+    --chat-user-text: #1b5e20;
+    --chat-system-bg: #f0f0f0;
+    --chat-system-text: #555;
+
+    --transition-speed: 0.2s; /* Faster for snappier feel */
+}
+
+body.dark-theme {
+    --bg-color: #121212; /* Very dark, common for dark themes */
+    --text-color: #e0e0e0; /* Off-white for text */
+    --heading-color: #f5f5f5; /* Brighter for headings */
+    --card-bg: #1e1e1e; /* Slightly lighter dark for cards */
+    --card-border-color: #333; /* Subtle border */
+    --navbar-bg: #1e1e1e; /* Same as card for cohesive look */
+    --navbar-text-color: #e0e0e0;
+    --link-color: #64b5f6; /* Brighter blue for links */
+    --link-hover-color: #90caf9;
+    --input-bg: #2c2c2c;
+    --input-border-color: #444;
+    --input-text-color: #e0e0e0;
+    --input-focus-border: var(--link-color);
+    --input-focus-shadow-rgb: 100, 181, 246; /* For the link color */
+    --table-header-bg: #2c2c2c;
+    --table-border-color: #333;
+    --table-row-hover-bg: #252525;
+    --hr-color: #444;
+    
+    --badge-info-bg: #1976d2; /* Darker, more saturated badge colors */
+    --badge-info-text: #e3f2fd;
+    --badge-warning-bg: #ffa000;
+    --badge-warning-text: #212529; /* Dark text on yellow can work */
+    --badge-danger-bg: #d32f2f;
+    --badge-danger-text: #fce4ec;
+    --badge-secondary-bg: #424242;
+    --badge-secondary-text: #e0e0e0;
+
+    --chat-bot-bg: #1a364f;
+    --chat-bot-text: #a6d1ff;
+    --chat-user-bg: #143d15;
+    --chat-user-text: #b2f0b6;
+    --chat-system-bg: #303030;
+    --chat-system-text: #bdbdbd;
+}
+
+/* General Body Styling */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+    padding: 20px;
+}
+@media (max-width: 768px) {
+    .container {
+        width: 95%;
+    }
+}
+
+/* Navbar */
+.navbar {
+    background-color: var(--navbar-bg) !important; 
+    border-bottom: 1px solid var(--card-border-color);
+    transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+body.dark-theme .navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* Stronger shadow for dark mode */
+}
+
+.navbar .navbar-brand,
+.navbar .nav-link,
+.navbar .navbar-text {
+    color: var(--navbar-text-color) !important;
+    transition: color var(--transition-speed) ease;
+}
+.navbar .nav-link:hover {
+    color: var(--link-hover-color) !important;
+}
+.navbar-toggler {
+    border-color: rgba(var(--navbar-text-color-rgb, 52, 58, 64), 0.5) !important; /* Bootstrap default is too light */
+}
+body.dark-theme .navbar-toggler {
+    border-color: rgba(var(--navbar-text-color-rgb, 224, 224, 224), 0.5) !important;
+}
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(var(--navbar-text-color-rgb, 52, 58, 64), 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+}
+:root { --navbar-text-color-rgb: 52, 58, 64; }
+body.dark-theme { --navbar-text-color-rgb: 224, 224, 224; }
+
+/* Cards */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border-color);
+    transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    border-radius: 0.375rem; /* Default Bootstrap radius */
+}
+.card-header, .card-footer {
+    background-color: var(--card-bg); 
+    border-bottom: 1px solid var(--card-border-color);
+    border-top: 1px solid var(--card-border-color);
+    color: var(--heading-color); /* Use heading color for headers */
+    padding: 0.75rem 1.25rem;
+    transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+.card-header:first-child {
+    border-radius: calc(0.375rem - 1px) calc(0.375rem - 1px) 0 0;
+}
+.card-footer:last-child {
+    border-radius: 0 0 calc(0.375rem - 1px) calc(0.375rem - 1px);
+}
+.card-body {
+    color: var(--text-color);
+    padding: 1.25rem;
+}
+
+/* Forms */
+.form-control, .form-select {
+    background-color: var(--input-bg);
+    border: 1px solid var(--input-border-color);
+    color: var(--input-text-color);
+    border-radius: 0.25rem;
+    transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, color var(--transition-speed) ease;
+}
+.form-control::placeholder {
+    color: color-mix(in srgb, var(--input-text-color) 60%, transparent);
+}
+.form-control:focus, .form-select:focus {
+    background-color: var(--input-bg);
+    color: var(--input-text-color);
+    border-color: var(--input-focus-border);
+    box-shadow: 0 0 0 0.25rem rgba(var(--input-focus-shadow-rgb), 0.25);
+}
+.form-select {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23cccccc' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+body.dark-theme .form-select {
+     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='var(--input-text-color)' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+}
+.form-label {
+    color: var(--heading-color);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 0.25rem; /* Standard BS radius */
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.15s ease-in-out;
+    border: 1px solid transparent;
+}
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.btn:active {
+    transform: translateY(0px);
+    box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.btn-primary { background-color: var(--primary-color); border-color: var(--primary-color); color: #fff; }
+.btn-primary:hover { background-color: var(--primary-hover-color); border-color: var(--primary-hover-color); color: #fff; }
+
+.btn-success { background-color: var(--success-color); border-color: var(--success-color); color: #fff; }
+.btn-success:hover { background-color: var(--success-hover-color); border-color: var(--success-hover-color); color: #fff; }
+
+.btn-info { background-color: var(--info-color); border-color: var(--info-color); color: #000; }
+.btn-info:hover { background-color: color-mix(in srgb, var(--info-color) 85%, black); border-color: color-mix(in srgb, var(--info-color) 85%, black); color: #000; }
+body.dark-theme .btn-info { color: #fff; }
+body.dark-theme .btn-info:hover { color: #fff; }
+
+
+.btn-secondary { background-color: var(--secondary-color); border-color: var(--secondary-color); color: #fff; }
+.btn-secondary:hover { background-color: color-mix(in srgb, var(--secondary-color) 85%, black); border-color: color-mix(in srgb, var(--secondary-color) 85%, black); color: #fff; }
+
+.btn-outline-primary { color: var(--primary-color); border-color: var(--primary-color); }
+.btn-outline-primary:hover { background-color: var(--primary-color); color: #fff; }
+body.dark-theme .btn-outline-primary { color: var(--link-color); border-color: var(--link-color); }
+body.dark-theme .btn-outline-primary:hover { background-color: var(--link-color); color: var(--card-bg); }
+
+
+/* Alerts */
+.alert {
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    animation: fadeIn 0.3s ease-out;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.alert-dismissible .btn-close {
+    filter: var(--dark-theme-active, invert(0)); /* Invert close button in dark mode */
+}
+body.dark-theme .alert-dismissible .btn-close {
+    --dark-theme-active: invert(100%) sepia(0%) saturate(0%) hue-rotate(110deg) brightness(200%) contrast(100%);
+}
+
+
+.alert-success { background-color: #d1e7dd; border-color: #badbcc; color: #0f5132; }
+body.dark-theme .alert-success { background-color: #0f5132; border-color: #146c43; color: #d1e7dd; }
+
+.alert-danger { background-color: #f8d7da; border-color: #f5c2c7; color: #842029; }
+body.dark-theme .alert-danger { background-color: #842029; border-color: #a9323c; color: #f8d7da; }
+
+.alert-warning { background-color: #fff3cd; border-color: #ffecb5; color: #664d03; }
+body.dark-theme .alert-warning { background-color: #664d03; border-color: #896a1a; color: #fff3cd; }
+
+.alert-info { background-color: #cff4fc; border-color: #b6effb; color: #055160; }
+body.dark-theme .alert-info { background-color: #055160; border-color: #06687d; color: #cff4fc; }
+
+
+/* Tables */
+.table {
+    background-color: var(--card-bg); /* Use card-bg for table */
+    color: var(--text-color);
+    border: 1px solid var(--table-border-color); /* Add overall border if desired */
+    width: 100%;
+    margin-bottom: 1rem;
+}
+.table th, .table td {
+    border-color: var(--table-border-color);
+    padding: 0.75rem;
+    vertical-align: top; /* BS default */
+    border-top: 1px solid var(--table-border-color);
+}
+.table thead th {
+    background-color: var(--table-header-bg);
+    color: var(--heading-color);
+    border-bottom: 2px solid var(--table-border-color);
+    vertical-align: bottom;
+}
+.table-hover tbody tr:hover {
+    background-color: var(--table-row-hover-bg);
+    color: var(--text-color); 
+}
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: var(--table-row-hover-bg); /* Use hover color for striped rows for subtlety */
+}
+
+/* Badges */
+.badge {
+    border-radius: 0.25rem; /* Standard BS radius */
+    padding: 0.35em 0.65em;
+    font-weight: 600;
+    line-height: 1;
+}
+.bg-primary { background-color: var(--primary-color) !important; color: #fff !important; } /* Example for status badge */
+.bg-warning { background-color: var(--warning-color) !important; color: #000 !important; } /* Example for priority badge */
+body.dark-theme .bg-warning { color: #000 !important; /* Yellow is tricky in dark mode, often keep dark text */}
+
+/* Specific badge colors for list_tickets.html, ensure they are themed */
+.badge.bg-info.text-dark { /* from list_tickets.html */
+    background-color: var(--badge-info-bg) !important;
+    color: var(--badge-info-text) !important;
+}
+.badge.bg-warning.text-dark { /* from list_tickets.html */
+    background-color: var(--badge-warning-bg) !important;
+    color: var(--badge-warning-text) !important;
+}
+.badge.bg-danger { /* from list_tickets.html */
+    background-color: var(--badge-danger-bg) !important;
+    color: var(--badge-danger-text) !important;
+}
+.badge.bg-secondary { /* from list_tickets.html */
+     background-color: var(--badge-secondary-bg) !important;
+    color: var(--badge-secondary-text) !important;
+}
+
+
+/* Chat interface styling */
+#chat-output {
+    display: flex;
+    flex-direction: column;
+    gap: 8px; 
+}
+#chat-output .chat-message {
+    padding: 10px 14px;
+    border-radius: 16px;
+    max-width: 78%;
+    line-height: 1.45;
+    animation: slideIn 0.25s ease-out forwards;
+    opacity: 0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+body.dark-theme #chat-output .chat-message {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+#chat-output .bot-message {
+    background-color: var(--chat-bot-bg);
+    color: var(--chat-bot-text);
+    align-self: flex-start;
+    margin-right: auto;
+    border-bottom-left-radius: 4px;
+}
+#chat-output div:not(.bot-message):not(.system-message) { /* User messages */
+    background-color: var(--chat-user-bg);
+    color: var(--chat-user-text);
+    align-self: flex-end;
+    margin-left: auto;
+    border-bottom-right-radius: 4px;
+}
+#chat-output .system-message {
+    font-style: italic;
+    font-size: 0.9em;
+    color: var(--chat-system-text);
+    text-align: center;
+    background-color: var(--chat-system-bg);
+    max-width: 100%;
+    border-radius: 6px;
+    padding: 6px 10px;
+    box-shadow: none;
+}
+
+/* Agent Assist specific styles */
+#agent-assist-output {
+    background-color: var(--input-bg);
+    color: var(--text-color); /* Use general text color */
+    border: 1px solid var(--input-border-color);
+    border-radius: 0.25rem;
+    padding: 10px;
+    min-height: 100px; /* Give it some min height */
+}
+#agent-assist-output p { margin-bottom: 0.5rem; }
+#agent-assist-output strong { color: var(--heading-color); }
+#agent-assist-output small { color: color-mix(in srgb, var(--text-color) 70%, transparent); }
+
+
+/* Ticket View specific message styling */
+#ticket-messages .mb-2 { 
+    border-radius: 6px;
+    padding: 10px !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.07);
+}
+body.dark-theme #ticket-messages .mb-2 {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
+
+#ticket-messages .bg-light-blue {
+    background-color: var(--chat-bot-bg) !important; 
+    color: var(--chat-bot-text) !important;
+}
+#ticket-messages .bg-light-green {
+    background-color: var(--chat-user-bg) !important; 
+    color: var(--chat-user-text) !important;
+}
+
+/* General link styling */
+a {
+    color: var(--link-color);
+    text-decoration: none;
+    transition: color var(--transition-speed) ease;
+}
+a:hover {
+    color: var(--link-hover-color);
+    text-decoration: underline;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--heading-color);
+    font-weight: 500;
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
+}
+h1 { font-size: 2rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.5rem; }
+
+/* Horizontal Rule */
+hr {
+    border: 0;
+    border-top: 1px solid var(--hr-color);
+    margin: 1.5rem 0;
+}
+
+/* Utility class for subtle text */
+.text-muted {
+    color: color-mix(in srgb, var(--text-color) 70%, transparent) !important;
+}
+
+/* List group items */
+.list-group-item {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border-color);
+    color: var(--text-color);
+    padding: 0.75rem 1.25rem;
+}
+.list-group-item:first-child {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+}
+.list-group-item:last-child {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+}
+
+/* Theme Toggle Button Styling */
+#theme-toggle-button {
+    background: none;
+    border: 1px solid var(--navbar-text-color);
+    color: var(--navbar-text-color);
+    border-radius: 50%;
+    width: 32px; /* Slightly smaller */
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    padding: 0;
+}
+#theme-toggle-button:hover {
+    background-color: rgba(128, 128, 128, 0.1);
+    border-color: var(--link-hover-color);
+    color: var(--link-hover-color);
+}
+body.dark-theme #theme-toggle-button:hover {
+     background-color: rgba(200, 200, 200, 0.1);
+}
+#theme-toggle-button .theme-icon {
+    font-size: 1rem; /* Adjusted size */
+}

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %}
+<h1>Admin Dashboard for {{ current_user.company.name if current_user.company else "Platform" }}</h1>
+<p>Welcome, {{ username }}!</p>
+<p>This is where company administrators can manage settings, users, and view overall operational summaries.</p>
+<ul>
+    <li><a href="{{ url_for('kb.manage_kb') }}">Manage Knowledge Base</a></li>
+    <li><a href="{{ url_for('ticketing.list_tickets') }}">View All Company Tickets</a></li>
+    <!-- Add links to user management, reporting features etc. -->
+</ul>
+
+<!-- Placeholder for AI-Driven Operations Summary & Reporting -->
+<div class="mt-4">
+    <h4>AI Operations Insights (Conceptual)</h4>
+    <p><em>This section would display AI-generated summaries, trend analysis, and predictive insights.</em></p>
+    <ul>
+        <li>Real-time dashboards (ticket volume, resolution rates).</li>
+        <li>Automated daily/weekly summaries of support operations.</li>
+        <li>Emerging issues highlighted by AI.</li>
+    </ul>
+</div>
+{% endblock %}

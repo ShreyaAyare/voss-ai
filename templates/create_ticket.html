@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+<h2>{{ title }}</h2>
+<form method="POST" action="">
+    {{ form.hidden_tag() }}
+    <div class="mb-3">
+        {{ form.subject.label(class="form-label") }}
+        {{ form.subject(class="form-control") }}
+    </div>
+    <div class="mb-3">
+        {{ form.description.label(class="form-label") }}
+        {{ form.description(class="form-control", rows="6") }}
+    </div>
+
+    {% if current_user.role in ['admin', 'agent'] %}
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            {{ form.status.label(class="form-label") }}
+            {{ form.status(class="form-select") }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ form.priority.label(class="form-label") }}
+            {{ form.priority(class="form-select") }}
+        </div>
+        <div class="col-md-4 mb-3">
+            {{ form.category.label(class="form-label") }}
+            {{ form.category(class="form-control", placeholder="AI will suggest if blank") }}
+        </div>
+    </div>
+    <div class="mb-3">
+        {{ form.assignee_id.label(class="form-label") }}
+        {{ form.assignee_id(class="form-select") }}
+    </div>
+    {% endif %}
+
+    <div class="mb-3">
+        {# Use the specific submit button for create if you defined one, or the general one with changed label #}
+        {{ form.submit_ticket_details(class="btn btn-success") }} 
+        {# Or if you added form.create_ticket_submit: {{ form.create_ticket_submit(class="btn btn-success") }} #}
+    </div>
+</form>
+{% endblock %}
